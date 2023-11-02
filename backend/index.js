@@ -1,20 +1,22 @@
 const express = require("express");
+
+const userRouter = require('./routes/userRoutes');
+
+
+
 const app = express();
 
-app.get("/", (req, res) => {
-    res.send("Hello World!");
-});
+//middleware calls
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 
-app.get("/test", (req, res) => {
-    res.status(200).json({ message: "pass!" });
-});
+//routes
 
+//signin and signup routes
+app.use('/', userRouter);
 
-app.get('*', (req, res) => {
-    res.status(404).json({ message: 'Not Found' });
-})
 
 app.listen(3000, () => {
-    console.log('server running');
-})
+	console.log("server running");
+});
