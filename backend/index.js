@@ -1,7 +1,8 @@
 const express = require("express");
 
 const userRouter = require('./routes/userRoutes');
-
+const homeRouter = require('./routes/homePageRoutes');
+const postRouter = require('./routes/postRouter');
 
 
 const app = express();
@@ -15,6 +16,12 @@ app.use(express.urlencoded({ extended: true }));
 
 //signin and signup routes
 app.use('/', userRouter);
+
+//home page routes
+app.use('/home', homeRouter);
+
+//post routes
+app.use('/posts', postRouter)
 
 
 app.listen(3000, () => {
