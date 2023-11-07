@@ -1,4 +1,5 @@
 const express = require("express");
+require("dotenv").config();
 
 const userRouter = require('./routes/userRoutes');
 const homeRouter = require('./routes/homePageRoutes');
@@ -30,6 +31,8 @@ app.use('/groups', groupRouter);
 
 //comment routes
 app.use('/comments', commentRouter);
+
+app.get('/', (req, res) => res.status(200).send("home page"));
 
 app.listen(3000, () => {
 	console.log("server running");

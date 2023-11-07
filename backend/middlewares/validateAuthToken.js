@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const SECRET = "secret key hai bai";
+const SECRET = process.env.JWT_SECRET;
 
 
 const addDummyToken = (req, res, next) => {
