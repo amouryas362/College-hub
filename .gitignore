@@ -5,3 +5,8 @@
 
 # Ignore Node.js modules and dependencies
 node_modules/
+
+# Ignore text files
+*.txt
+
+.gitignore
