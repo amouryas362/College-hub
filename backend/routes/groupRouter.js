@@ -3,7 +3,7 @@ const groupRouter = express.Router();
 
 const validateAuthToken = require('../middlewares/validateAuthToken');
 
-const {allGroups} = require('../controllers/groupControllers');
+const {allGroups, getGroupPosts, joinGroup, leaveGroup, fetchGroupMetaData, updateGroupMetaData} = require('../controllers/groupControllers');
 
 groupRouter.get('/all', validateAuthToken, allGroups);
 
