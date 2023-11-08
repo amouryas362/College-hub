@@ -41,7 +41,7 @@ const signup = async (req, res) => {
 		
 		const token = jwt.sign({ displayName, email }, SECRET, { expiresIn: "1d" });
 
-		const data = { displayName, email };
+		const data = { displayName, accountId };
 		return res
 			.status(201)
 			.json({ messaage: "Account successfully created", data, token });
@@ -74,12 +74,12 @@ const signin = async (req, res) => {
 
 		const accountId = result.rows[0].account_id;
 		
-		//fetch the displayName to generate for jwt generation
+		//fetch the displayName and accountId to generate for jwt generation
 		result = await db.query('SELECT display_name FROM users WHERE account_id = $1', [accountId]);
 		displayName = result.rows[0].display_name;
 
 		//generate token
-		const token = jwt.sign({ email, displayName }, SECRET, { expiresIn: "1d" });
+		const token = jwt.sign({ displayName, accountId }, SECRET, { expiresIn: "1d" });
 
 		return res.status(200).json({
 			message: "signin successful",

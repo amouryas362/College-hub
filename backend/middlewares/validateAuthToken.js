@@ -19,7 +19,9 @@ const validateAuthToken = (req, res, next) => {
 			token = token.split(" ")[1];
 			const user = jwt.verify(token, SECRET);
 
-			req.username = user.username;
+			req.displayName = user.displayName;
+			req.accountId = user.accountId;
+			
 		} catch (error) {
 			return res
 				.status(401)
