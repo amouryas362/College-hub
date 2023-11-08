@@ -9,17 +9,17 @@ groupRouter.post('/create', validateAuthToken, createGroup);
 
 groupRouter.get('/all', validateAuthToken, allGroups);
 
-groupRouter.get('/:groupId/posts', validateAuthToken, getGroupPosts);
+groupRouter.get('/:groupName/posts', validateAuthToken, getGroupPosts);
 
-groupRouter.get('/:groupId/settings', validateAuthToken, fetchGroupMetaData);
+groupRouter.get('/:groupName/settings', validateAuthToken, fetchGroupMetaData);
 
-groupRouter.post('/:groupId/join', validateAuthToken, joinGroup);
+groupRouter.post('/:groupName/join', validateAuthToken, joinGroup);
 
-groupRouter.post('/:groupId/leave', validateAuthToken, leaveGroup);
+groupRouter.post('/:groupName/leave', validateAuthToken, leaveGroup);
 
-groupRouter.patch('/:groupId/settings', validateAuthToken, updateGroupMetaData);
+groupRouter.patch('/:groupName/settings', validateAuthToken, updateGroupMetaData);
 
-groupRouter.delete('/:groupId/delete', validateAuthToken, deleteGroup);
+groupRouter.delete('/:groupName/delete', validateAuthToken, deleteGroup);
 
 //TODO: add logic to delete group
 //TODO: add middlweare to check if the user is admin or not

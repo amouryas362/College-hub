@@ -13,7 +13,7 @@ const signup = async (req, res) => {
 		//return a token
 
 		const user = await db.query("SELECT * FROM accounts WHERE email = $1", [email]);
-		
+
 		if (user.rows.length > 0) {
 			return res.status(409).json({
 				message: "This email is already linked to a different account",
@@ -39,7 +39,7 @@ const signup = async (req, res) => {
 		
 		await db.query("INSERT INTO users (account_id, display_name, about) VALUES ($1,$2, $3)", [accountId, displayName, about]);
 		
-		const token = jwt.sign({ displayName, email }, SECRET, { expiresIn: "1d" });
+		const token = jwt.sign({ displayName, accountId }, SECRET, { expiresIn: "1d" });
 
 		const data = { displayName, accountId };
 		return res
