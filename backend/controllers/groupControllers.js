@@ -1,3 +1,7 @@
+const createGroup = async (req, res) => {
+	return res.send("working");
+};
+
 const allGroups = async (req, res) => {
     return res.send("working");
 };
@@ -16,5 +20,17 @@ const fetchGroupMetaData = async (req, res) => {
 const updateGroupMetaData = async (req, res) => {
 	return res.send("working");
 };
+const deleteGroup = async (req, res) => {
+	return res.send("working");
+};
 
-module.exports = { allGroups, getGroupPosts, joinGroup, leaveGroup, fetchGroupMetaData, updateGroupMetaData };
+module.exports = {
+	createGroup,
+	allGroups,
+	getGroupPosts,
+	joinGroup,
+	leaveGroup,
+	fetchGroupMetaData,
+	updateGroupMetaData,
+	deleteGroup,
+};
