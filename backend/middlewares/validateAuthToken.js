@@ -18,7 +18,6 @@ const validateAuthToken = (req, res, next) => {
 
 			token = token.split(" ")[1];
 			const user = jwt.verify(token, SECRET);
-
 			req.displayName = user.displayName;
 			req.accountId = user.accountId;
 			
