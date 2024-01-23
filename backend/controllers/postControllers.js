@@ -1,12 +1,5 @@
-const DUMMY_POST = [
-	{
-		id: 1,
-		title: "This is a post",
-		body: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Recusandae quam molestiae adipisci, dolore tempora impedit? Vel, culpa ea reprehenderit magnam nobis quam quisquam dolor voluptatibus alias, qui laudantium animi molestias!",
-		likes: 13,
-		dislikes: 0,
-	},
-];
+const db = require('../model/db');
+
 
 const fetchPost = async (req, res) => {
 	//get the id from the params
@@ -20,24 +13,32 @@ const fetchPost = async (req, res) => {
 };
 
 const createPost = async (req, res) => {
-	const { title, body, author, type, group } = req.body;
-
-	const data = {
-		title,
-		body,
-		author,
-		type,
-		likes: 0,
-		dislikes: 0,
-		group,
-	};
+	const { title, body, type, groupName } = req.body;
+	const accountId = req.accountId;
+	/*
+		tables affected by this action:
+		posts
+		group contains posts
+	*/
 
 	try {
 		//store post in the database
+		let result = await db.query('INSERT INTO posts (created_by, group_name, title, body, type) VALUES ($1, $2, $3, $4, $5)',
+		[
+			accountId, groupName, title, body, type
+		]);
+
+		const postId = result.rows[0].post_id;
+
+		await db.query('INSERT INTO group_contains_post (group_name, post_id) VALUES ($1, $2)', [
+			groupName, postId
+		]);
+
 		return res
 			.status(201)
-			.json({ message: "post created successfully", data });
+			.json({ message: "post created successfully", result });
 	} catch (error) {
+		console.log(error);
 		return res
 			.status(500)
 			.json({ message: "An unexpected error occoured" });

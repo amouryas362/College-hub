@@ -1,5 +1,7 @@
 const express = require("express");
+
 const { signup, signin } = require("../controllers/userControllers");
+
 const {
 	validateSignInData,
 	validateSignUpData,
