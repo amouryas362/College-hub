@@ -1,6 +1,6 @@
 # The College Hub
 
-## Problem
+## Problem Statement
 
 MANIT is a large college with numerous events happening throughout the year. However, many of these events often go unnoticed by students, even when they are of significant importance. This lack of awareness is a common pain point for students at the college.
 
@@ -14,41 +14,64 @@ In summary, "The College Hub" is a comprehensive college news and event platform
 - Ensures that students and users stay up-to-date with campus activities.
 - Helps bridge the gap between the college community and the events that matter to them.
 
-## Key Features
 
-- Event Calendar: A visual calendar displaying upcoming events and important dates.
-- News Feed: Latest news articles and updates from the college.
-- User Profiles: Personalized profiles for users to customize their experience.
-- Notifications: Receive alerts for upcoming events and news that match your interests.
-- Event Submissions: Allow student organizations and clubs to submit their events.
-- Mobile-Friendly: Access the platform on the go via mobile devices.
+<!-- GETTING STARTED -->
+## Getting Started
 
-## How to Get Started
+### Prerequisites
 
-1. Clone the repository: `git clone https://github.com/yourrepository.git`
-2. Navigate to the project directory: `cd The-College-Hub`
-3. Install dependencies: `npm install` or `yarn install`
-4. Start the application: `npm start` or `yarn start`
+1. You should have [PostgreSQL](https://www.postgresql.org/download/) installed on your machine along with [pgAdmin](https://www.postgresql.org/download/)
 
-## Contributing
+2. Clone the repo
+    ```sh
+    git clone https://github.com/Aloneduckling/TheCollegeHub.git
+    ```
 
-We welcome contributions to improve "The College Hub." If you would like to contribute, please follow these steps:
+3. Create a database with the name `TheCollegeHub` using pgAdmin
 
-1. Fork the repository on GitHub.
-2. Clone your fork: `git clone https://github.com/yourusername/The-College-Hub.git`
-3. Create a new branch for your feature: `git checkout -b feature-name`
-4. Make your changes, then commit and push to your fork.
-5. Create a pull request to the main repository.
+4. Create the tables in the database by running the [SQL Source file](https://github.com/Aloneduckling/TheCollegeHub/blob/main/utils/creatin_tables_commands.sql) in pgAdmin
 
-Please review our [Contribution Guidelines](CONTRIBUTING.md) for more details.
+5. Fill the following details in the `.env` file 
+    ```
+    # NODE_ENV
+    NODE_ENV='development'
 
-## License
 
-This project is licensed under the [MIT License](LICENSE).
+    # express port
+    PORT= #enter the port number here
 
-## Contact
+    # postgress configurations
+    DB_USER= #enter the postgress username here
+    DB_PASSWORD= #enter the password here
+    DB_HOST='localhost'
+    DB_NAME='TheCollegeHub'
+    DB_PORT=5432 #this is the default port for postgres database
 
-For questions or inquiries, feel free to contact us at [your.email@example.com](mailto:your.email@example.com).
+    # JWT SECRET
+    JWT_SECRET= #any random string will do
+    ```
+
+### Installation and getting the server up and running
+
+
+1. Install NPM packages
+   ```sh
+   cd backend
+   npm install
+   ```
+2. Start the server
+    ```sh
+    npm start
+    ```
+
+## Roadmap
+
+### Backend
+
+- [ ] Migrate to an ORM for the backend
+- [ ] Complete the commentControllers
+- [ ] Implement Unit tests
+- [ ] Implement rate-limiting
 
 ---
 **The College Hub** - Stay Connected, Stay Informed
