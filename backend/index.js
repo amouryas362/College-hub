@@ -1,6 +1,17 @@
 const express = require("express");
 require("dotenv").config();
 
+
+//database connections
+const db = require("./model/db");
+
+try{
+	db.sequelize.sync({ force: true });
+}catch(e){
+	console.log("DB error: ", e);
+}
+
+
 const userRouter = require('./routes/userRoutes');
 const homeRouter = require('./routes/homePageRoutes');
 const postRouter = require('./routes/postRouter');
@@ -12,7 +23,6 @@ const app = express();
 
 //middleware calls
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 
 //routes
