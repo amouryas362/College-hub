@@ -9,13 +9,12 @@ const postModel = (sequelize) => {
 		},
 		type: {
 			type: DataTypes.ENUM(
-				"News",
-				"Event",
-				"Meme",
-				"Discussion",
-				"General",
+				"post",
+				"comment",
+				"group",
+				"general"
 			),
-			defaultValue: "General",
+			defaultValue: "general",
 			allowNull: false,
 		},
 		body: {
