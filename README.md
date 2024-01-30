@@ -68,7 +68,7 @@ In summary, "The College Hub" is a comprehensive college news and event platform
 
 ### Backend
 
-- [ ] Migrate to an ORM for the backend
+- [x] Migrate to an ORM for the backend
 - [ ] Complete the commentControllers
 - [ ] Implement Unit tests
 - [ ] Implement rate-limiting
