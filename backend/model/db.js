@@ -44,9 +44,9 @@ try {
 		through: "moderates",
 	});
 
-	//group has a creator
-	//one to one relationship
-	db.users.hasOne(db.groups);
+	//user creates groups
+	//one to many relationship
+	db.users.hasMany(db.groups);
 	db.groups.belongsTo(db.users);
 
 	//post has a creator
@@ -62,7 +62,7 @@ try {
 		onDelete: "CASCADE",
 	});
 	db.posts.belongsTo(db.groups);
-	//TODO: Check the group's primary key thing and set the foreign key properly everywhere
+	
 
 	//post has comments
 	//one to many relationship
