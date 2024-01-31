@@ -28,22 +28,33 @@ app.use(express.json());
 //routes
 
 //signin and signup routes
-app.use('/', userRouter);
+app.use('/api/v1', userRouter);
 
 //home page routes
-app.use('/home', homeRouter);
+app.use("/api/v1", homeRouter);
 
 //post routes
-app.use('/posts', postRouter)
+app.use("/api/v1/post", postRouter);
 
 //group routes
-app.use('/groups', groupRouter);
+app.use("/api/v1/group", groupRouter);
 
 //comment routes
-app.use('/comments', commentRouter);
+app.use("/api/v1/comment", commentRouter);
 
-app.get('/', (req, res) => res.status(200).send("home page"));
 
-app.listen(3000, () => {
+//wildcard to handle route mismatches
+app.all("*", (req, res) => {
+	return res.status(404).json({ message: "Not found!" });
+})
+
+app.use((err, res, res, next) => {
+
+	return res.status(500).json({ message: "Internal server error!" });
+
+});
+
+
+app.listen(proces.env.PORT || 3000, () => {
 	console.log("server running");
 });
