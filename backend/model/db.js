@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require("sequelize");
-
+const logger = require('../logger.util');
 const db = {};
 
 const sequelize = new Sequelize(
@@ -105,8 +105,8 @@ try {
 	
 
 	//log if there is an error
-	if (process.env.NODE_ENV === "development")
-		console.log("Connection has been established successfully.");
+	if (process.env.NODE_ENV === "dev")
+		logger("Connection has been established successfully.");
 } catch (error) {
 	console.error("Unable to connect to the database:", error);
 }

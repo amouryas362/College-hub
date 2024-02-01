@@ -1,12 +1,11 @@
 const express = require("express");
 require("dotenv").config();
-
-
+const logger = require('./logger.util');
 //database connections
 const db = require("./model/db");
 
 try{
-	db.sequelize.sync({ force: true });
+	db.sequelize.sync(/*{ force: true }*/);
 }catch(e){
 	console.log("DB error: ", e);
 }
@@ -48,13 +47,12 @@ app.all("*", (req, res) => {
 	return res.status(404).json({ message: "Not found!" });
 })
 
-app.use((err, res, res, next) => {
-
+app.use((err, req, res, next) => {
+	logger(err);
 	return res.status(500).json({ message: "Internal server error!" });
-
 });
 
 
-app.listen(proces.env.PORT || 3000, () => {
-	console.log("server running");
+app.listen(process.env.PORT || 3000, () => {
+	logger("server running");
 });

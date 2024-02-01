@@ -6,6 +6,7 @@ const {
 	validateSignInData,
 	validateSignUpData,
 } = require("../middlewares/joiValidationMiddleware");
+
 const validateAuthToken = require("../middlewares/validateAuthToken");
 
 const userRouter = express.Router();

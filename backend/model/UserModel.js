@@ -1,7 +1,5 @@
 const { DataTypes } = require("sequelize");
 
-
-
 const userModel = (sequelize) => {
     return sequelize.define("user", {
 		userId: {
@@ -16,6 +14,7 @@ const userModel = (sequelize) => {
 		},
 		about: {
 			type: DataTypes.TEXT,
+			defaultValue: "Hello There!"
 		},
 		email: {
 			type: DataTypes.STRING,
