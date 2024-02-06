@@ -8,7 +8,7 @@ const userModel = (sequelize) => {
 			primaryKey: true,
 			allowNull: false,
 		},
-		displayName: {
+		username: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},

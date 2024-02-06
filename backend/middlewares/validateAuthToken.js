@@ -14,7 +14,7 @@ const validateAuthToken = (req, res, next) => {
 			token = token.split(" ")[1];
 			const user = jwt.verify(token, process.env.JWT_SECRET);
 			//add the user's displyName and their userId to the req object
-			req.displayName = user.displayName;
+			req.username = user.username;
 			req.userId = user.userId;
 			
 		} catch (error) {

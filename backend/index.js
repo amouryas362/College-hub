@@ -11,7 +11,7 @@ try{
 }
 
 
-const userRouter = require('./routes/userRoutes');
+const authRouter = require('./routes/authRouter');
 const homeRouter = require('./routes/homePageRoutes');
 const postRouter = require('./routes/postRouter');
 const groupRouter = require('./routes/groupRouter');
@@ -27,7 +27,7 @@ app.use(express.json());
 //routes
 
 //signin and signup routes
-app.use('/api/v1', userRouter);
+app.use('/api/v1', authRouter);
 
 //home page routes
 app.use("/api/v1", homeRouter);
@@ -52,7 +52,4 @@ app.use((err, req, res, next) => {
 	return res.status(500).json({ message: "Internal server error!" });
 });
 
-
-app.listen(process.env.PORT || 3000, () => {
-	logger("server running");
-});
+module.exports = app;

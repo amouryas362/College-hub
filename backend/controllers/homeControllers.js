@@ -2,7 +2,7 @@ const db = require('../model/db');
 
 const generateFeed = async (req, res) => {
     //fetch the feed from the database
-    //get the displayName from the req object
+    //get the username from the req object
     const accountId = req.accountId;
     
     /*

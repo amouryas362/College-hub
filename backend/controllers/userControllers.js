@@ -9,7 +9,7 @@ const db = require("../model/db");
 const User = db.users;
 
 const signup = async (req, res) => {
-	const { email, password, displayName } = req.body;
+	const { email, password, username } = req.body;
 
 	try {
 		//validate the username
@@ -42,20 +42,20 @@ const signup = async (req, res) => {
 		let newUser = await User.create({
 			email,
 			password: hashedPassword,
-			displayName,
+			username,
 		});
 
 		const userId = newUser.id;
 
 		const token = jwt.sign(
-			{ displayName, userId },
+			{ username, userId },
 			process.env.JWT_SECRET,
 			{ expiresIn: "60d" },
 		);
 
 		return res
 			.status(201)
-			.json({ messaage: "Account successfully created", token });
+			.json({ message: "Account successfully created", token });
 	} catch (error) {
 		logger(error);
 		return res.status(500).json({ message: "something went wrong", error });
@@ -87,7 +87,7 @@ const signin = async (req, res) => {
 
 		//generate token
 		const token = jwt.sign(
-			{ displayName: result.displayName, userId: result.userId },
+			{ username: result.username, userId: result.userId },
 			process.env.JWT_SECRET,
 			{ expiresIn: "60d" },
 		);

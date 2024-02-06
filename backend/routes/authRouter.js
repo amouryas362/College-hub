@@ -9,12 +9,12 @@ const {
 
 const validateAuthToken = require("../middlewares/validateAuthToken");
 
-const userRouter = express.Router();
+const authRouter = express.Router();
 
 //signUp route
-userRouter.post("/signup", validateAuthToken, validateSignUpData, signup);
+authRouter.post("/signup", validateAuthToken, validateSignUpData, signup);
 
 //signIn route
-userRouter.post("/signin", validateAuthToken, validateSignInData, signin);
+authRouter.post("/signin", validateAuthToken, validateSignInData, signin);
 
-module.exports = userRouter;
+module.exports = authRouter;
