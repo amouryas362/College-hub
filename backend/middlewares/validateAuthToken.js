@@ -10,7 +10,7 @@ const validateAuthToken = (req, res, next) => {
 			if (!token) {
 				throw new Error("JWT Token not found!");
 			}
-
+			
 			token = token.split(" ")[1];
 			const user = jwt.verify(token, process.env.JWT_SECRET);
 			//add the user's displyName and their userId to the req object
