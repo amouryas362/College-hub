@@ -1,21 +1,33 @@
 const db = require("../model/db");
 
+//group model
+const Group = db.groups;
+
+
 const createGroup = async (req, res) => {
 	//extract group_name and the user's id from the req
-	const { groupName, description, groupAccess } = req.body;
-	const accountId = req.accountId;
-	try {
-		//check if the group exists
-		let result = await db.query(
-			"SELECT group_name FROM groups where group_name = $1",
-			[groupName]
-		);
+	const { groupName, description, visibility } = req.body;
 	
-		if (result.rows.length > 0) {
+	//group creation should be a part of a transaction
+
+	try {
+
+		const transaction = await db.sequelize.transaction();
+
+		//check if the group exists
+		let group = await Group.findOne({
+			where: {
+				groupName
+			},
+			transaction
+		})
+	
+		if (group) {
+			await transaction.rollback();
 			return res.status(409).json({ message: "Group already exists" });
 		}
 
-		//Create a group add the user as a member to the group add to member and moderates table
+		//Create a group add the user as a member to the group 
 
 		//extract access logic
 		const isPublic = groupAccess === "public" ? true : false;

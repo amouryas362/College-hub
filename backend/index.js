@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const logger = require("./logger.util");
+const cors = require('cors');
 //database connections
 const db = require("./model/db");
 
@@ -21,7 +22,7 @@ const app = express();
 
 //middleware calls
 app.use(express.json());
-
+app.use(cors());
 //routes
 
 //auth routes

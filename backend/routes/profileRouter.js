@@ -1,9 +1,12 @@
 const profileRouter = require("express").Router();
 
-const validateAuthToken = require('../middlewares/validateAuthToken');
+const validateAuthToken = require("../middlewares/validateAuthToken");
 
-const { getUserProfile, updateUserProfile } = require('../controllers/profileControllers');
-
+const {
+	getUserProfile,
+	updateUserProfile,
+} = require("../controllers/profileControllers");
+const { validateAboutData } = require("../middlewares/joiValidationMiddleware");
 
 /*
 1. Get Profile info
@@ -13,11 +16,15 @@ Creation and deletion of profile has been handled by authRouter routes
 
  */
 //get user's profile by ID
-profileRouter.get('/users/:id', validateAuthToken, getUserProfile);
+profileRouter.get("/users/:id", validateAuthToken, getUserProfile);
 
-//update user's profile by ID
-profileRouter.put('/users/:id', validateAuthToken, updateUserProfile);
-
+//update user about section get userId by ID
+profileRouter.put(
+	"/users/:id",
+	validateAuthToken,
+	validateAboutData,
+	updateUserProfile,
+);
 
 //TODO: Add the functionality to upload the profile photos
 

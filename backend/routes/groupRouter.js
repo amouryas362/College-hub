@@ -2,10 +2,11 @@ const express = require('express');
 const groupRouter = express.Router();
 
 const validateAuthToken = require('../middlewares/validateAuthToken');
+const { validateGroupData } = require('../middlewares/joiValidationMiddleware')
 
 const {createGroup, deleteGroup, allGroups, getGroupPosts, joinGroup, leaveGroup, fetchGroupMetaData, updateGroupMetaData} = require('../controllers/groupControllers');
 
-groupRouter.post('/create', validateAuthToken, createGroup);
+groupRouter.post('/create', validateAuthToken, validateGroupData,createGroup);
 
 groupRouter.get('/all', validateAuthToken, allGroups);
 

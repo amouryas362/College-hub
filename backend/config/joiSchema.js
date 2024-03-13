@@ -12,7 +12,7 @@ const signInSchema = Joi.object({
 });
 
 const emailSchema = Joi.object({
-	email: Joi.string().email().required()
+	email: Joi.string().email().required(),
 });
 
 const passwordSchema = Joi.object({
@@ -20,6 +20,23 @@ const passwordSchema = Joi.object({
 	newPassword: Joi.string().min(8).max(64).required(),
 });
 
-module.exports = { signInSchema, signUpSchema, emailSchema, passwordSchema };
+const aboutSchema = Joi.object({
+	about: Joi.string().required(),
+});
+
+const groupSchema = Joi.object({
+	groupName: Joi.string().min(3).required(),
+	description: Joi.string().min(3).required(),
+	visibility: Joi.string.valid("public", "private").required()
+});
+
+module.exports = {
+	signInSchema,
+	signUpSchema,
+	emailSchema,
+	passwordSchema,
+	aboutSchema,
+	groupSchema
+};
 
 // TODO: Use Zod instead of JOI
