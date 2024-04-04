@@ -1,30 +1,46 @@
-const express = require('express');
+const express = require("express");
 const groupRouter = express.Router();
 
-const validateAuthToken = require('../middlewares/validateAuthToken');
-const { validateGroupData } = require('../middlewares/joiValidationMiddleware')
+const validateAuthToken = require("../middlewares/validateAuthToken");
+const {
+	validateGroupData,
+	validateGroupUpdateData,
+} = require("../middlewares/joiValidationMiddleware");
 
-const {createGroup, deleteGroup, allGroups, getGroupPosts, joinGroup, leaveGroup, fetchGroupMetaData, updateGroupMetaData} = require('../controllers/groupControllers');
+const {
+	createGroup,
+	deleteGroup,
+	allGroups,
+	getGroupPosts,
+	joinGroup,
+	leaveGroup,
+	fetchGroupMetaData,
+	updateGroupMetaData,
+	createModerator
+} = require("../controllers/groupControllers");
 
-groupRouter.post('/create', validateAuthToken, validateGroupData,createGroup);
+groupRouter.post("/create", validateAuthToken, validateGroupData, createGroup);
 
-groupRouter.get('/all', validateAuthToken, allGroups);
+groupRouter.get("/all", validateAuthToken, allGroups);
 
-groupRouter.get('/:groupName/posts', validateAuthToken, getGroupPosts);
+groupRouter.get("/:groupName/posts", validateAuthToken, getGroupPosts);
 
-groupRouter.get('/:groupName/settings', validateAuthToken, fetchGroupMetaData);
+groupRouter.get("/:groupName/settings", validateAuthToken, fetchGroupMetaData);
 
-groupRouter.post('/:groupName/join', validateAuthToken, joinGroup);
+groupRouter.post("/:groupName/join", validateAuthToken, joinGroup);
 
-groupRouter.post('/:groupName/leave', validateAuthToken, leaveGroup);
+groupRouter.post("/:groupName/leave", validateAuthToken, leaveGroup);
 
-groupRouter.patch('/:groupName/settings', validateAuthToken, updateGroupMetaData);
+groupRouter.put(
+	"/:groupName/settings",
+	validateAuthToken,
+	validateGroupUpdateData,
+	updateGroupMetaData,
+);
 
-groupRouter.delete('/:groupName/delete', validateAuthToken, deleteGroup);
+groupRouter.delete("/:groupName", validateAuthToken, deleteGroup);
 
-//TODO: add logic to delete group
-//TODO: add middlweare to check if the user is admin or not
-
+groupRouter.post('/:groupName/moderator/create', validateAuthToken, createModerator);
 
 
 module.exports = groupRouter;

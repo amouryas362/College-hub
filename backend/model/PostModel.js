@@ -36,11 +36,11 @@ const postModel = (sequelize) => {
 		},
 		"type": {
 			type: DataTypes.ENUM(
-				"News",
-				"Event",
-				"Meme",
-				"Discussion",
-				"General",
+				"news",
+				"event",
+				"meme",
+				"discussion",
+				"general",
 			),
 			defaultValue: "General",
 			allowNull: false,

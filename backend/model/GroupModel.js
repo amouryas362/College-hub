@@ -19,11 +19,6 @@ const groupModel = (sequelize) => {
             defaultValue: 'public',
             allowNull: false
         },
-        permissions: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: true,
-            allowNull: false
-        }
     });
 }
 

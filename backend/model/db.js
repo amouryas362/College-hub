@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require("sequelize");
-const logger = require('../logger.util');
+const logger = require("../logger.util");
 const db = {};
 
 const sequelize = new Sequelize(
@@ -28,41 +28,76 @@ try {
 	// many to many relation in groups and users
 	db.groups.belongsToMany(db.users, {
 		through: "membership",
+		as: "Member",
+		foreignKey:{
+			name: "groupName"
+		}
 	});
 
 	db.users.belongsToMany(db.groups, {
 		through: "membership",
+		foreignKey:{
+			name: "userId"
+		}
 	});
 
 	//moderation table
 	//many to many relationship in groups and users
 	db.groups.belongsToMany(db.users, {
 		through: "moderates",
+		as: "Moderator",
+		foreignKey: {
+			name: "groupName"
+		}
 	});
 
 	db.users.belongsToMany(db.groups, {
 		through: "moderates",
+		foreignKey: {
+			name: "userId"
+		}
 	});
 
 	//user creates groups
 	//one to many relationship
-	db.users.hasMany(db.groups);
-	db.groups.belongsTo(db.users);
+	db.users.hasMany(db.groups, {
+		foreignKey: {
+			name: "userId"
+		}
+	});
+	db.groups.belongsTo(db.users, {
+		foreignKey:{
+			name: "userId"
+		}
+	});
 
 	//post has a creator
 	//many to one relationship
 	db.users.hasMany(db.posts, {
 		onDelete: "CASCADE",
+		foreignKey: {
+			name: "userId"
+		}
 	});
-	db.posts.belongsTo(db.users);
+	db.posts.belongsTo(db.users,{
+		foreignKey: {
+			name: "userId"
+		}
+	});
 
 	//group has posts
 	//one to many relationship
 	db.groups.hasMany(db.posts, {
 		onDelete: "CASCADE",
+		foreignKey: {
+			name: "groupName"
+		}
 	});
-	db.posts.belongsTo(db.groups);
-	
+	db.posts.belongsTo(db.groups,{
+		foreignKey: {
+			name:"groupName"
+		}
+	});
 
 	//post has comments
 	//one to many relationship
@@ -87,7 +122,7 @@ try {
 		},
 	});
 	db.reports.belongsTo(db.users);
-	
+
 	//TODO: Think more about the report system, should I create extra tables for
 	//reportee type(user, group, post, comment). Currently doing user to user reports only
 
@@ -96,13 +131,10 @@ try {
 	db.users.hasMany(db.reports, {
 		foreignKey: {
 			name: "reportee",
-			type: DataTypes.UUID
-		}
+			type: DataTypes.UUID,
+		},
 	});
 	db.reports.belongsTo(db.users);
-
-
-	
 
 	//log if there is an error
 	if (process.env.NODE_ENV === "dev")

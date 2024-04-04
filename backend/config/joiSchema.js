@@ -27,8 +27,13 @@ const aboutSchema = Joi.object({
 const groupSchema = Joi.object({
 	groupName: Joi.string().min(3).required(),
 	description: Joi.string().min(3).required(),
-	visibility: Joi.string.valid("public", "private").required()
+	visibility: Joi.valid("public", "private").required()
 });
+
+const groupUpdateSchema = Joi.object({
+	description: Joi.string().min(3),
+	visibility: Joi.valid("public", "private")
+})
 
 module.exports = {
 	signInSchema,
@@ -36,7 +41,8 @@ module.exports = {
 	emailSchema,
 	passwordSchema,
 	aboutSchema,
-	groupSchema
+	groupSchema,
+	groupUpdateSchema
 };
 
 // TODO: Use Zod instead of JOI

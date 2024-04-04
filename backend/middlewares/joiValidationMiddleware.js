@@ -5,6 +5,7 @@ const {
 	passwordSchema,
 	aboutSchema,
 	groupSchema,
+	groupUpdateSchema,
 } = require("../config/joiSchema");
 
 const validateSignUpData = (req, res, next) => {
@@ -57,11 +58,20 @@ const validateAboutData = (req, res, next) => {
 const validateGroupData = (req, res, next) => {
 	const { error } = groupSchema.validate(req.body);
 
-	if(error){
-		return res.status(411).json({ message: error.details[0].message });
+	if (error) {
+		return res.status(400).json({ message: error.details[0].message });
 	}
 	next();
-}
+};
+
+const validateGroupUpdateData = (req, res, next) => {
+	const { error } = groupUpdateSchema.validate(req.body);
+
+	if (error) {
+		return res.status(400).json({ message: error.details[0].message });
+	}
+	next();
+};
 
 module.exports = {
 	validateSignInData,
@@ -69,5 +79,6 @@ module.exports = {
 	validateEmailData,
 	validatePasswordData,
 	validateAboutData,
-	validateGroupData
+	validateGroupData,
+	validateGroupUpdateData
 };
