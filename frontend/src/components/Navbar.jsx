@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom";
 import logo from "../assets/iconicon.png";
 
 import { Input } from "../components/ui/input";
@@ -72,6 +73,8 @@ const Navbar = (props) => {
 					</DropdownMenu>
 				</div>
 			</nav>
+
+			<Outlet />
 		</>
 	);
 };

@@ -1,8 +1,8 @@
-import Navbar from "../components/Navbar.jsx";
+import Navbar from "../../components/Navbar.jsx";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import axios, { AxiosHeaders } from "axios";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -13,13 +13,16 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "../components/ui/form.jsx";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input.jsx";
-import { Toaster } from "../components/ui/toaster";
-import { toast } from "../components/ui/use-toast";
-import { Textarea } from "../components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "../components/ui/radio-group";
+} from "../../components/ui/form.jsx";
+import { Button } from "../../components/ui/button.jsx";
+import { Input } from "../../components/ui/input.jsx";
+import { Toaster } from "../../components/ui/toaster.jsx";
+import { toast } from "../../components/ui/use-toast.js";
+import { Textarea } from "../../components/ui/textarea.jsx";
+import {
+	RadioGroup,
+	RadioGroupItem,
+} from "../../components/ui/radio-group.jsx";
 
 const signupSchema = z
 	.object({
@@ -48,28 +51,32 @@ const Signin = () => {
 	});
 
 	const onSubmit = async (values) => {
-		// try {
-		// 	//TODO: fix
-		// 	const res = await axios.post(
-		// 		"http://localhost:3000/api/v1/signin",
-		// 		values,
-		// 	);
-		// 	localStorage.setItem("token", JSON.stringify(res.data.token));
-		// 	navigate("/");
-		// } catch (err) {
-		// 	console.log("Error: ", err);
-		// 	toast({
-		// 		title: "Uh oh! Something went wrong.",
-		// 		description: err.response.data.message,
-		// 	});
-		// }
-        console.log(values);
-		form.reset();
+		try {
+			const token = JSON.parse(localStorage.getItem("token"));
+
+			const res = await axios.post(
+				"http://localhost:3000/api/v1/group/create",
+				values,
+				{
+					headers: {
+						"Content-type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+				},
+			);
+
+			navigate(`/group/${values.groupName}`, { state: values });
+		} catch (err) {
+			console.log("Error: ", err);
+			toast({
+				title: "Uh oh! Something went wrong.",
+				description: err.response.data.message,
+			});
+		}
 	};
 
 	return (
 		<>
-			<Navbar />
 
 			<div className="flex flex-col mx-auto mt-20 w-1/2 border-2 p-20 rounded-lg shadow-sm ">
 				<h1 className="text-center text-3xl mb-10">Create a Group</h1>
