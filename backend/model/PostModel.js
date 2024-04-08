@@ -42,7 +42,7 @@ const postModel = (sequelize) => {
 				"discussion",
 				"general",
 			),
-			defaultValue: "General",
+			defaultValue: "general",
 			allowNull: false,
 		},
 		likes: {

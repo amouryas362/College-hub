@@ -16,7 +16,8 @@ const {
 	leaveGroup,
 	fetchGroupMetaData,
 	updateGroupMetaData,
-	createModerator
+	createModerator,
+	checkMembership
 } = require("../controllers/groupControllers");
 
 groupRouter.post("/create", validateAuthToken, validateGroupData, createGroup);
@@ -42,5 +43,6 @@ groupRouter.delete("/:groupName", validateAuthToken, deleteGroup);
 
 groupRouter.post('/:groupName/moderator/create', validateAuthToken, createModerator);
 
+groupRouter.get('/:groupName/membership', validateAuthToken, checkMembership);
 
 module.exports = groupRouter;

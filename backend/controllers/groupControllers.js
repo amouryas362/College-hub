@@ -79,6 +79,7 @@ const allGroups = async (req, res) => {
 		return res.status(500).json({ message: "something went wrong" });
 	}
 };
+
 const getGroupPosts = async (req, res) => {
 	//get group name
 	const groupName = req.params.groupName;
@@ -304,7 +305,7 @@ const deleteGroup = async (req, res) => {
 		return res.status(500).json({ message: "something went wrong" });
 	}
 };
-//TODO: test this route and add the documentation to notion doc
+
 const createModerator = async (req, res) => {
 	const { userId: newModerator } = req.body;
 	const { groupName } = req.params;
@@ -352,7 +353,7 @@ const createModerator = async (req, res) => {
 
 		await group.addModerator(newModerator);
 
-		return res.status(204).json({ message: "moderator added successfully" });
+		return res.status(200).json({ message: "moderator added successfully" });
 
 	} catch (error) {
 		logger(error);
@@ -360,6 +361,34 @@ const createModerator = async (req, res) => {
 	}
 
 };
+
+//TODO: new endpoint to get the current membership status of the group
+const checkMembership = async (req, res) => {
+	try {
+		const userId = req.userId;
+		const { groupName } = req.params;
+		//check if the user is member or not
+		const group = await Group.findByPk(groupName);
+
+		if(!group){
+			return res.status(404).json({ message: "group not found" });
+		}
+
+		const member = await group.getMember({
+			where: { userId },
+			attributes: ['userId'],
+			joinTableAttributes: []
+		});
+
+		const isMember = member.length > 0;
+
+		return res.status(200).json({ membership: isMember });
+
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: "internal server error" });
+	}
+}
 
 module.exports = {
 	createGroup,
@@ -370,5 +399,6 @@ module.exports = {
 	fetchGroupMetaData,
 	updateGroupMetaData,
 	deleteGroup,
-	createModerator
+	createModerator,
+	checkMembership
 };
