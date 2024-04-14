@@ -382,7 +382,12 @@ const checkMembership = async (req, res) => {
 
 		const isMember = member.length > 0;
 
-		return res.status(200).json({ membership: isMember });
+		const data = {
+			group,
+			isMember
+		}
+
+		return res.status(200).json(data);
 
 	} catch (error) {
 		console.log(error);
