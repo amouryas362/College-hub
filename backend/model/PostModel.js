@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes } = require("sequelize");
 
 const postModel = (sequelize) => {
-    return sequelize.define("post", {
+	return sequelize.define("post", {
 		postId: {
 			type: DataTypes.UUID,
 			defaultValue: DataTypes.UUIDV4,
@@ -15,10 +15,6 @@ const postModel = (sequelize) => {
 					args: [3],
 					msg: "Min 3 chars allowed",
 				},
-				is: {
-					args: ["^S+$"],
-					msg: "Title should have at least one non whitespace characters",
-				},
 			},
 		},
 		body: {
@@ -28,13 +24,9 @@ const postModel = (sequelize) => {
 					args: [20],
 					msg: "Min 20 chars allowed",
 				},
-				is: {
-					args: ["^S+$"],
-					msg: "Body should have at least one non whitespace characters",
-				},
 			},
 		},
-		"type": {
+		type: {
 			type: DataTypes.ENUM(
 				"news",
 				"event",
@@ -55,6 +47,5 @@ const postModel = (sequelize) => {
 		},
 	});
 };
-
 
 module.exports = postModel;

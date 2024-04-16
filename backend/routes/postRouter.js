@@ -8,7 +8,8 @@ const {
 	dislikePost,
 	editPost,
 	deletePost,
-    createPost
+    createPost,
+	fetchPostByGroup
 } = require('../controllers/postControllers');
 
 
@@ -20,6 +21,8 @@ postRouter.post('/new', validateAuthToken, createPost); //TODO: add a joi post v
 // fetch
 postRouter.get('/:id', validateAuthToken, fetchPost); 
 
+//get by group
+postRouter.get('/group/:groupName', validateAuthToken, fetchPostByGroup);
 
 
 // like/dislike

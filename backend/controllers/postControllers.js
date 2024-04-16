@@ -1,47 +1,69 @@
-const db = require('../model/db');
+const db = require("../model/db");
 
+const logger = require("../logger.util");
+
+const Post = db.posts;
+const Group = db.groups;
 
 const fetchPost = async (req, res) => {
-	//get the id from the params
+	//get the postId from the params
 	const { id } = req.params;
+
 	try {
 		//fetch the post details from the db
-		return res.status(200).json({ message: "success", post: DUMMY_POST });
+		const post = await Post.findByPk(id);
+		if (!post) {
+			return res.status(404).json({ message: "post not found" });
+		}
+		return res.status(200).json(post);
 	} catch (error) {
-		return res.status(404).json({ message: "post not found" });
+		logger(error);
+		return res.status(500).json({ message: "internal server error" });
+	}
+};
+
+const fetchPostByGroup = async (req, res) => {
+	try {
+		const { groupName } = req.params;
+		const group = await Group.findByPk(groupName);
+
+		if (!group) {
+			return res.status(404).json({ message: "group not found" });
+		}
+
+		const posts = await group.getPosts();
+		return res.json(posts);
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: "internal server error" });
 	}
 };
 
 const createPost = async (req, res) => {
+	
 	const { title, body, type, groupName } = req.body;
-	const accountId = req.accountId;
-	/*
-		tables affected by this action:
-		posts
-		group contains posts
-	*/
+	const userId = req.userId;
 
 	try {
-		//store post in the database
-		let result = await db.query('INSERT INTO posts (created_by, group_name, title, body, type) VALUES ($1, $2, $3, $4, $5)',
-		[
-			accountId, groupName, title, body, type
-		]);
+		
+		const group = await Group.findByPk(groupName);
+		if (!group) {
+			return res.status(404).json({ message: "group not found" });
+		}
 
-		const postId = result.rows[0].post_id;
+		const post = await Post.create({
+			title,
+			body,
+			type,
+			userId,
+			groupName,
+		});
 
-		await db.query('INSERT INTO group_contains_post (group_name, post_id) VALUES ($1, $2)', [
-			groupName, postId
-		]);
-
-		return res
-			.status(201)
-			.json({ message: "post created successfully", result });
+		await group.addPost(post);
+		return res.status(201).json(post);
 	} catch (error) {
 		console.log(error);
-		return res
-			.status(500)
-			.json({ message: "An unexpected error occoured" });
+		return res.status(500).json({ message: "internal server error" });
 	}
 };
 
@@ -49,6 +71,14 @@ const likePost = async (req, res) => {
 	const { id } = req.params;
 	try {
 		//update the like count by one
+		const post = await Post.findByPk(id);
+		if (!post) {
+			return res.status(404).json({ message: "post not found" });
+		}
+
+		//increment the like count of the post
+		await post.increment("likes");
+
 		return res.status(200).json({ message: "successfully liked the post" });
 	} catch (error) {
 		return res.status(500).json({ message: "something went wrong" });
@@ -58,7 +88,14 @@ const likePost = async (req, res) => {
 const dislikePost = async (req, res) => {
 	const { id } = req.params;
 	try {
-		//update the like count by one
+		const post = await Post.findByPk(id);
+		if (!post) {
+			return res.status(404).json({ message: "post not found" });
+		}
+
+		//decrement the like count of the post
+		await post.increment("dislikes");
+
 		return res
 			.status(200)
 			.json({ message: "successfully disliked the post" });
@@ -68,24 +105,37 @@ const dislikePost = async (req, res) => {
 };
 
 const editPost = async (req, res) => {
-    //the post is already fetched you will get the data that is to be updated so do that
-    const { id } = req.params;
-    try{
-        return res.status(200).json({message: "post edit successfull"});
-    }catch(error){
-        return res.status(500).json({message: "something went wrong"});
-    }
+	const { id } = req.params;
+	const { title, body, type } = req.body;
+
+	try {
+		//update the post in the database
+		const post = await Post.findByPk(id);
+		if (!post) {
+			return res.status(404).json({ message: "post not found" });
+		}
+
+		await post.update({ title, body, type });
+
+		return res.status(204).json();
+	} catch (error) {
+		return res.status(500).json({ message: "something went wrong" });
+	}
 };
 
-
 const deletePost = async (req, res) => {
-    //delete the post from the database
-    const { id } = req.params;
-    try {
-        return res.status(200).json({message: "Post Deleted successfully"});
-    } catch (error) {
-        return res.status(500).json({message: "something went wrong"});
-    }
+	//delete the post from the database
+	const { id } = req.params;
+	try {
+		await Post.destroy({
+			where: {
+				id,
+			},
+		});
+		return res.status(204).json();
+	} catch (error) {
+		return res.status(500).json({ message: "something went wrong" });
+	}
 };
 
 module.exports = {
@@ -94,5 +144,6 @@ module.exports = {
 	dislikePost,
 	editPost,
 	deletePost,
-    createPost
+	createPost,
+	fetchPostByGroup,
 };
