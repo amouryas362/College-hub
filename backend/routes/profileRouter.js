@@ -5,8 +5,12 @@ const validateAuthToken = require("../middlewares/validateAuthToken");
 const {
 	getUserProfile,
 	updateUserProfile,
+	getUserGroups
 } = require("../controllers/profileControllers");
 const { validateAboutData } = require("../middlewares/joiValidationMiddleware");
+
+
+profileRouter.get('/users/groups', validateAuthToken, getUserGroups);
 
 /*
 1. Get Profile info
@@ -25,6 +29,8 @@ profileRouter.put(
 	validateAboutData,
 	updateUserProfile,
 );
+
+
 
 //TODO: Add the functionality to upload the profile photos
 
