@@ -6,7 +6,8 @@ import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import CreateGroup from "./pages/group/CreateGroup"
 import AllGroups from "./pages/group/AllGroups";
-
+import PostPage from "./pages/post/PostPage";
+import NewPost from "./pages/post/NewPost";
 const App = () => {
 	return (
 		<>
@@ -20,6 +21,14 @@ const App = () => {
 					<Route path="all" element={ <AllGroups /> } />
 					<Route path=":id" element={ <Group /> } />
 				</Route>
+
+				<Route path="/post"  element={ <Navigation /> }>
+					<Route path="new" element={ <NewPost /> } />
+					<Route path=":id" element={ <PostPage /> } />
+				</Route>
+
+
+
 			</Routes>
 		</>
 	);

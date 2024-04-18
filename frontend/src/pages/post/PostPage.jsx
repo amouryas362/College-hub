@@ -1,24 +1,25 @@
 import { useEffect, useState } from "react";
 import Post from "../post/Post";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import DisplayError from "../../components/DisplayError.jsx";
 import { Player } from '@lottiefiles/react-lottie-player';
-import loading from "../../assets/postLoading.json";
+import loading from "../../assets/postPageLoading.json";
+
 
 
 const GroupBody = () => {
 	//fetch all the post and display them
-	const navigate = useNavigate();
-	const { id: groupName } = useParams();
-	const [posts, setPosts] = useState([]);
+    
+	const { id: postId } = useParams();
+	const [post, setPost] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
 	useEffect(() => {
 		const fetchPosts = async () => {
 			try {
-				const groups = await axios.get(
-					`http://localhost:3000/api/v1/post/group/${groupName}`,
+				const post = await axios.get(
+					`http://localhost:3000/api/v1/post/${postId}`,
 					{
 						headers: {
 							Authorization: `Bearer ${JSON.parse(
@@ -28,7 +29,7 @@ const GroupBody = () => {
 					},
 				);
 
-				setPosts(groups.data);
+				setPost(post.data);
 				setIsLoading(false);
 			} catch (error) {
 				//add a error component thing here
@@ -39,15 +40,12 @@ const GroupBody = () => {
 		fetchPosts();
 	}, []);
 
-	const viewPost = (postId) => {
-        navigate(`/post/${postId}`);
-    }
-
+    
 
 	if (isLoading) {
 		return <Player
 		src={loading}
-		className="mx-auto mt-10"
+		className="mx-auto mt-10 w-1/2"
 		loop
 		autoplay
 		speed={1}
@@ -58,16 +56,21 @@ const GroupBody = () => {
 		return <DisplayError message={error.message} />;
 	}
 
-	const groupPosts = posts.map((post, index) => {
-		return <Post onClick={() => viewPost(post.postId)} key={index} idx={index} {...post} />;
-	});
 
 	return (
-		<div>
-			<h2 className="text-xl text-center font-semibold my-10">
-				All Posts
-			</h2>
-      		{ groupPosts.length > 0 ? groupPosts : <h1 className="text-center text-3xl">No posts yet</h1>}
+		<div className="flex flex-col mt-20">
+      		<Post {...post} />
+            <div>
+                <h1>Comments</h1>
+                <div>
+                    <h2>Comment 1</h2>
+                    <p>Comment 1 body</p>
+                </div>
+                <div>
+                    <h2>Comment 2</h2>
+                    <p>Comment 2 body</p>
+                </div>
+            </div>
 		</div>
 	);
 };
