@@ -9,7 +9,7 @@ import AllGroups from "./pages/group/AllGroups";
 import PostPage from "./pages/post/PostPage";
 import NewPost from "./pages/post/NewPost";
 import Index from "./pages/Index";
-import User from "./pages/User";
+import User from "./pages/User/User";
 const App = () => {
 	return (
 		<>

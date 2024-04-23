@@ -87,7 +87,6 @@ const NewPost = () => {
 	});
 
 	const onSubmit = async (values) => {
-        console.log(values);
 		try {
 			const token = JSON.parse(localStorage.getItem("token"));
 

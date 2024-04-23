@@ -234,7 +234,6 @@ const SheetUpdate = (props) => {
 				},
 			);
 			props.setForceUpdate((prev) => !prev);
-			console.log('done');
 		} catch (error) {
 			console.log(error);
 			<DisplayError message={error.response.data} />;

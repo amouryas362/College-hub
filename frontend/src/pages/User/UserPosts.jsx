@@ -1,26 +1,22 @@
 import { useEffect, useState } from "react";
 import Post from "../post/Post";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import DisplayError from "../../components/DisplayError.jsx";
-import Comment from '../Comment.jsx'
 import { Player } from '@lottiefiles/react-lottie-player';
-import loading from "../../assets/postPageLoading.json";
+import loading from "../../assets/postLoading.json";
 
-
-
-const GroupBody = () => {
-	//fetch all the post and display them
-    
-	const { id: postId } = useParams();
-	const [post, setPost] = useState([]);
+const UserPosts = () => {
+	const navigate = useNavigate();
+	const { id: username } = useParams();
+	const [posts, setPosts] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
 	useEffect(() => {
 		const fetchPosts = async () => {
 			try {
-				const post = await axios.get(
-					`http://localhost:3000/api/v1/post/${postId}`,
+				const groups = await axios.get(
+					`http://localhost:3000/api/v1/post/user/${username}`,
 					{
 						headers: {
 							Authorization: `Bearer ${JSON.parse(
@@ -30,7 +26,7 @@ const GroupBody = () => {
 					},
 				);
 
-				setPost(post.data);
+				setPosts(groups.data);
 				setIsLoading(false);
 			} catch (error) {
 				//add a error component thing here
@@ -41,12 +37,15 @@ const GroupBody = () => {
 		fetchPosts();
 	}, []);
 
-    
+	const viewPost = (postId) => {
+        navigate(`/post/${postId}`);
+    }
+
 
 	if (isLoading) {
 		return <Player
 		src={loading}
-		className="mx-auto mt-10 w-1/2"
+		className="mx-auto mt-10"
 		loop
 		autoplay
 		speed={1}
@@ -57,13 +56,18 @@ const GroupBody = () => {
 		return <DisplayError message={error.message} />;
 	}
 
+	const groupPosts = posts.map((post, index) => {
+		return <Post onClick={() => viewPost(post.postId)} key={index} idx={index} {...post} />;
+	});
 
 	return (
-		<div className="flex flex-col mt-20">
-      		<Post {...post} />
-            <Comment />
+		<div>
+			<h2 className="text-xl text-center font-semibold mb-5">
+				All Posts
+			</h2>
+      		{ groupPosts.length > 0 ? groupPosts : <h1 className="text-center text-3xl">No posts yet</h1>}
 		</div>
 	);
 };
 
-export default GroupBody;
+export default UserPosts;
