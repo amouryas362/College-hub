@@ -4,8 +4,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { Button } from "../../components/ui/button";
+import {
+	RadioGroup,
+	RadioGroupItem,
+} from "../../components/ui/radio-group.jsx";
+import { Label } from "../../components/ui/label";
 import DisplayError from "../../components/DisplayError";
-
+import { Textarea } from "../../components/ui/textarea";
 import {
 	Accordion,
 	AccordionContent,
@@ -25,6 +30,17 @@ import {
 	AlertDialogTrigger,
 } from "../../components/ui/alert-dialog.jsx";
 
+import {
+	Sheet,
+	SheetClose,
+	SheetContent,
+	SheetDescription,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "../../components/ui/sheet.jsx";
+
 import { Toaster } from "../../components/ui/toaster.jsx";
 import { toast } from "../../components/ui/use-toast";
 
@@ -38,7 +54,7 @@ const GroupHeader = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [member, setMember] = useState(true);
-
+	const [forceUpdate, setForceUpdate] = useState(false);
 	useEffect(() => {
 		//TODO: use react-query to fetch data from the backend, this is to be done so as to standardize the fetching logic
 		const fetchGroups = async () => {
@@ -71,7 +87,7 @@ const GroupHeader = () => {
 		() => {
 			clearTimeout(timeoutFlag);
 		};
-	}, [groupName]);
+	}, [groupName, forceUpdate]);
 
 	const updateMembership = async () => {
 		const action = member ? "leave" : "join";
@@ -98,13 +114,13 @@ const GroupHeader = () => {
 		}
 	};
 	// useEffect(() => {
-		// console.log('second use effect');
-		// console.log(member);
-		// if (!member) {
-		// 	navigate("/");
-		// }
-		//for now we will not navigate to another page because the groups are public.
-		//when private groups will get implemented then we will show a page that will ask the user to join the group
+	// console.log('second use effect');
+	// console.log(member);
+	// if (!member) {
+	// 	navigate("/");
+	// }
+	//for now we will not navigate to another page because the groups are public.
+	//when private groups will get implemented then we will show a page that will ask the user to join the group
 	// }, [member]);
 
 	if (isLoading) {
@@ -145,9 +161,16 @@ const GroupHeader = () => {
 									</Button>
 								)}
 
-								<Button className="rounded-lg">
-									<Settings />
-								</Button>
+								{groupData.userId ===
+									JSON.parse(localStorage.getItem("user"))
+										.userId && (
+									<SheetUpdate
+										groupName={groupData.groupName}
+										description={groupData.description}
+										visibility={groupData.visibility}
+										setForceUpdate={setForceUpdate}
+									/>
+								)}
 							</div>
 						</AccordionContent>
 					</AccordionItem>
@@ -187,5 +210,97 @@ const ModalAlert = (props) => {
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>
+	);
+};
+
+const SheetUpdate = (props) => {
+	const [description, setDescription] = useState(props.description);
+	const [visibility, setVisibility] = useState(props.visibility);
+
+	const updateDetails = async () => {
+		try {
+			await axios.put(
+				`http://localhost:3000/api/v1/group/${props.groupName}/settings`,
+				{
+					description,
+					visibility,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${JSON.parse(
+							localStorage.getItem("token"),
+						)}`,
+					},
+				},
+			);
+			props.setForceUpdate((prev) => !prev);
+			console.log('done');
+		} catch (error) {
+			console.log(error);
+			<DisplayError message={error.response.data} />;
+		}
+	};
+
+	return (
+		<Sheet>
+			<SheetTrigger asChild>
+				<Button className="rounded-lg">
+					<Settings />
+				</Button>
+			</SheetTrigger>
+			<SheetContent className="W-[40%]">
+				<SheetHeader>
+					<SheetTitle>Edit Group Info</SheetTitle>
+					<SheetDescription>
+						Make changes to the group here. Click save when you're
+						done.
+					</SheetDescription>
+				</SheetHeader>
+				<div className="flex flex-col mt-10">
+					<div className="flex flex-col mb-10">
+						<Label className="mb-3 text-xl" htmlFor="description">
+							Group Description
+						</Label>
+						<Textarea
+							id="description"
+							className="w-full"
+							value={description}
+							onChange={(e) => setDescription(e.target.value)}
+						/>
+					</div>
+					<div className="flex flex-col mb-10">
+						<h3 className="text-xl mb-5">Visibility</h3>
+						<RadioGroup defaultValue={visibility}>
+							<div className="flex items-center space-x-2">
+								<RadioGroupItem
+									onClick={() => setVisibility("public")}
+									value="public"
+									id="r1"
+								/>
+								<Label htmlFor="r1">Public</Label>
+							</div>
+							<div className="flex items-center space-x-2">
+								<RadioGroupItem
+									onClick={() => setVisibility("private")}
+									value="private"
+									id="r2"
+								/>
+								<Label htmlFor="r2">Private</Label>
+							</div>
+						</RadioGroup>
+					</div>
+				</div>
+				<SheetFooter>
+					<SheetClose asChild>
+						<Button
+							onClick={updateDetails}
+							className="w-full"
+							type="submit">
+							Save changes
+						</Button>
+					</SheetClose>
+				</SheetFooter>
+			</SheetContent>
+		</Sheet>
 	);
 };

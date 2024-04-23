@@ -219,7 +219,7 @@ const NewPost = () => {
 										required>
 										<FormControl>
 											<SelectTrigger className="w-[180px]">
-												<SelectValue placeholder="Group Name" />
+												<SelectValue placeholder="Post Type" />
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>

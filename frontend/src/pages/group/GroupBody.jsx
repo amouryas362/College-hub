@@ -64,7 +64,7 @@ const GroupBody = () => {
 
 	return (
 		<div>
-			<h2 className="text-xl text-center font-semibold my-10">
+			<h2 className="text-xl text-center font-semibold mb-5">
 				All Posts
 			</h2>
       		{ groupPosts.length > 0 ? groupPosts : <h1 className="text-center text-3xl">No posts yet</h1>}

@@ -8,13 +8,17 @@ import CreateGroup from "./pages/group/CreateGroup"
 import AllGroups from "./pages/group/AllGroups";
 import PostPage from "./pages/post/PostPage";
 import NewPost from "./pages/post/NewPost";
+import Index from "./pages/Index";
+import User from "./pages/User";
 const App = () => {
 	return (
 		<>
 			<Routes>
-				<Route path='/' element={ <h1>Home page</h1>  } />
+				<Route path='/' element={ <Index />  } />
 				<Route path='/signup' element={ <Signup /> } />
 				<Route path='/signin' element={ <Signin /> } />
+				<Route path='/user/:id' element={ <User /> } />
+
 
 				<Route path="/group"  element={ <Navigation /> }>
 					<Route path="new" element={ <CreateGroup /> } />

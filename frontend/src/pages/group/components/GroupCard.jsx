@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom"
 import { Button } from "../../../components/ui/button.jsx"
 import {
   Card,
@@ -8,6 +9,7 @@ import {
 } from "../../../components/ui/card.jsx"
 
 export default function GroupCard(props) {
+  const navigate = useNavigate();
   return (
     <Card className="transition-all sm:col-span-2 m-2 hover:-translate-y-3 hover:border-orange-500">
       <CardHeader className="pb-3">
@@ -17,7 +19,7 @@ export default function GroupCard(props) {
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Button>View Group</Button>
+        <Button onClick={() => navigate(`/group/${props.groupName}`)}>View Group</Button>
       </CardFooter>
     </Card>
   )

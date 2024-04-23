@@ -10,7 +10,7 @@ const DisplayError = (props) => {
 			speed={1}
 		/>
 		<h1 className="text-3xl text-center">Something went Wrong</h1>
-		<h2 className="text-2xl text-muted">{props.message}</h2>
+		<h2 className="text-xl text-center mt-3">{props.message}</h2>
 	</>;
 };
 
