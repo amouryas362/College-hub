@@ -85,7 +85,7 @@ const GroupHeader = () => {
 		};
 		fetchGroups();
 		() => {
-			clearTimeout(timeoutFlag);
+			return clearTimeout(timeoutFlag);
 		};
 	}, [groupName, forceUpdate]);
 
