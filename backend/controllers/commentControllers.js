@@ -14,6 +14,12 @@ const getPostComments = async (req, res) => {
         const comments = await Comment.findAll({
             where: { postId },
             attributes: ['commentId', 'body', 'userId', 'postId'],
+            include: [
+                {
+                    model: User,
+                    attributes: ['username']
+                }
+            ]
         });
         
         return res.json(comments);
@@ -29,8 +35,10 @@ const getPostComments = async (req, res) => {
 
 const getUserComments = async (req, res) => {
     try {
-        const { userId } = req.params;
-        const user = await User.findByPk(userId);
+        const { username } = req.params;      
+        const user = await User.findOne({
+            where: { username }
+        });
         
         if(!user){
             return res.status(404).json({ message: "user not found" });
@@ -38,6 +46,12 @@ const getUserComments = async (req, res) => {
         // fetch all comments from postgress database
         const comments = await user.getComments({
             attributes: ['commentId', 'body', 'userId', 'postId'],
+            include: [
+                {
+                    model: User,
+                    attributes: ['username']
+                }
+            ]
         });
         
         return res.json(comments);

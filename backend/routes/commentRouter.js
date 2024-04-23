@@ -20,7 +20,7 @@ const {
 commentRouter.get('/post/:postId', validateAuthToken, getPostComments);
 
 //get all user's comments
-commentRouter.get('/user/:userId', validateAuthToken, getUserComments);
+commentRouter.get('/user/:username', validateAuthToken, getUserComments);
 
 //get a single comment data with a commentId
 commentRouter.get('/:commentId', validateAuthToken, getSingleComment);

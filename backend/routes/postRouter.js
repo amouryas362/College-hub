@@ -26,7 +26,7 @@ postRouter.get('/:id', validateAuthToken, fetchPost);
 postRouter.get('/group/:groupName', validateAuthToken, fetchPostByGroup);
 
 //get by user
-postRouter.get('/user/:userId', validateAuthToken, fetchPostByUser);
+postRouter.get('/user/:username', validateAuthToken, fetchPostByUser);
 
 // like/dislike
 postRouter.post('/:id/like', validateAuthToken, likePost);

@@ -4,6 +4,7 @@ const logger = require("../logger.util");
 
 const Post = db.posts;
 const Group = db.groups;
+const User = db.users;
 
 const fetchPost = async (req, res) => {
 	//get the postId from the params
@@ -40,13 +41,19 @@ const fetchPostByGroup = async (req, res) => {
 };
 
 const fetchPostByUser = async (req, res) => {
-	const userId = req.userId;
+	
 	try {
-		const posts = await Post.findAll({
+		const username = req.params.username;
+		const user = await User.findOne({
 			where: {
-				userId,
+				username,
 			},
 		});
+		if(!user){
+			return res.status(404).json({ message: "user not found" });
+		}
+
+		const posts = await user.getPosts();
 		return res.json(posts);
 	} catch (error) {
 		console.log(error);
