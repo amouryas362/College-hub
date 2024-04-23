@@ -5,7 +5,8 @@ const validateAuthToken = require('../middlewares/validateAuthToken');
 
 //import all the functions from commentControllers.js
 const {
-    getAllComments,
+    getPostComments,
+    getUserComments,
     getSingleComment,
     createComment,
     likeComment,
@@ -16,7 +17,10 @@ const {
 
 
 //get all comments under a post with a postId
-commentRouter.get('/:postId', validateAuthToken, getAllComments);
+commentRouter.get('/post/:postId', validateAuthToken, getPostComments);
+
+//get all user's comments
+commentRouter.get('/user/:userId', validateAuthToken, getUserComments);
 
 //get a single comment data with a commentId
 commentRouter.get('/:commentId', validateAuthToken, getSingleComment);
@@ -25,16 +29,16 @@ commentRouter.get('/:commentId', validateAuthToken, getSingleComment);
 commentRouter.post('/:postId/create', validateAuthToken, createComment);
 
 //like a comment with a commentId
-commentRouter.post('/like/:commentId', validateAuthToken, likeComment);
+commentRouter.post('/:commentId/like', validateAuthToken, likeComment);
 
 //dislike a comment with a commentId
-commentRouter.post('/dislike/:commentId', validateAuthToken, dislikeComment);
+commentRouter.post('/:commentId/dislike', validateAuthToken, dislikeComment);
 
 //edit a comment with a commentId
-commentRouter.put('/edit/:commentId', validateAuthToken, editComment);
+commentRouter.put('/:commentId/edit', validateAuthToken, editComment);
 
 //delete a comment with a commentId
-commentRouter.delete('/delete/:commentId', validateAuthToken, deleteComment);
+commentRouter.delete('/:commentId/delete', validateAuthToken, deleteComment);
 
 module.exports = commentRouter;
 

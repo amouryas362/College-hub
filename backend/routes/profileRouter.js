@@ -5,12 +5,15 @@ const validateAuthToken = require("../middlewares/validateAuthToken");
 const {
 	getUserProfile,
 	updateUserProfile,
-	getUserGroups
+	getUserGroups,
+	getUserPosts
 } = require("../controllers/profileControllers");
 const { validateAboutData } = require("../middlewares/joiValidationMiddleware");
 
 
 profileRouter.get('/users/groups', validateAuthToken, getUserGroups);
+
+profileRouter.get('/users/posts', validateAuthToken, getUserPosts);
 
 /*
 1. Get Profile info

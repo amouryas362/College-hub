@@ -103,15 +103,29 @@ try {
 	//one to many relationship
 	db.posts.hasMany(db.comments, {
 		onDelete: "CASCADE",
+		foreignKey: {
+			name: "postId"
+		}
 	});
-	db.comments.belongsTo(db.posts);
+	db.comments.belongsTo(db.posts, {
+		foreignKey: {
+			name: "postId"
+		}
+	});
 
 	//user has comments
 	//one to many relationship
 	db.users.hasMany(db.comments, {
 		onDelete: "CASCADE",
+		foreignKey: {
+			name: "userId"
+		}
 	});
-	db.comments.belongsTo(db.users);
+	db.comments.belongsTo(db.users, {
+		foreignKey: {
+			name: "userId"
+		}
+	});
 
 	//user creates reports
 	//one to many realtionship

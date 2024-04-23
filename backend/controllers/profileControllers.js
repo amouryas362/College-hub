@@ -3,7 +3,7 @@ const logger = require("../logger.util");
 
 //user model
 const User = require("../model/db").users;
-
+const Post = require("../model/db").posts;
 //controllers
 
 const getUserProfile = async (req, res) => {
@@ -93,8 +93,51 @@ const getUserGroups = async (req, res) => {
 	}
 };
 
+
+const getUserPosts = async (req, res) => {
+		try {
+			const userId = req.userId;
+			const user = await User.findOne({
+				where: {
+					userId,
+				},
+			});
+			if (!user) {
+				return res.status(404).json({ message: "User not found" });
+			}
+			//get all posts of the group in which the user is a member
+			const groups = await user.getGroups();
+
+			const groupNames = groups.map(group => group.groupName);
+
+			let posts = [];
+
+			for (let i = 0; i < groupNames.length; i++) {
+				const post = await Post.findAll({
+					where: {
+						groupName: groupNames[i],
+					},
+					include: [
+						{
+							model: User,
+							attributes: ["username"],
+						},
+					],
+				});
+				posts = posts.concat(post);
+			}
+
+			return res.json(posts);
+		} catch (error) {
+			console.log(error);
+			return res.status(500).json({ message: "internal server error" });
+		}
+}
+
+
 module.exports = {
 	getUserProfile,
 	updateUserProfile,
 	getUserGroups,
+	getUserPosts
 };

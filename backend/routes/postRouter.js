@@ -9,7 +9,8 @@ const {
 	editPost,
 	deletePost,
     createPost,
-	fetchPostByGroup
+	fetchPostByGroup,
+	fetchPostByUser
 } = require('../controllers/postControllers');
 
 
@@ -24,6 +25,8 @@ postRouter.get('/:id', validateAuthToken, fetchPost);
 //get by group
 postRouter.get('/group/:groupName', validateAuthToken, fetchPostByGroup);
 
+//get by user
+postRouter.get('/user/:userId', validateAuthToken, fetchPostByUser);
 
 // like/dislike
 postRouter.post('/:id/like', validateAuthToken, likePost);

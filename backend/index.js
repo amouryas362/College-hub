@@ -6,7 +6,7 @@ const cors = require('cors');
 const db = require("./model/db");
 
 try {
-	db.sequelize.sync(/*{ force: true }*/);
+	db.sequelize.sync(/*{ alter: true }*/);
 } catch (e) {
 	console.log("DB error: ", e);
 }

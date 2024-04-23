@@ -14,10 +14,6 @@ const postModel = (sequelize) => {
 					args: [1],
 					msg: "Comment Should not be empty",
 				},
-				is: {
-					args: ["^S+$"],
-                    msg: "Comment should have a body"
-				},
 			},
 		},
 		likes: {

@@ -1,30 +1,71 @@
-//implement all the functions mentioned in the commentRouter.js file
+const db = require('../model/db');
 
-//getAllComments
-const getAllComments = async (req, res) => {
+const User = db.users;
+const Post = db.posts;
+const Comment = db.comments;
+
+//getPostComments
+const getPostComments = async (req, res) => {
     try {
         const { postId } = req.params;
-        //fetch comments from postgress database
+        
+        
+        // fetch all comments from postgress database
+        const comments = await Comment.findAll({
+            where: { postId },
+            attributes: ['commentId', 'body', 'userId', 'postId'],
+        });
+        
+        return res.json(comments);
+        
 
     } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message
-        });
+        console.log(err);
+        return res.status(500).json({ message: "internal server error" });
     }
 };
+
+//getUserComments
+
+const getUserComments = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const user = await User.findByPk(userId);
+        
+        if(!user){
+            return res.status(404).json({ message: "user not found" });
+        }
+        // fetch all comments from postgress database
+        const comments = await user.getComments({
+            attributes: ['commentId', 'body', 'userId', 'postId'],
+        });
+        
+        return res.json(comments);
+        
+
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "internal server error" });
+    }
+}
+
+
 
 //getSingleComment
 const getSingleComment = async (req, res) => {
     try {
         const { commentId } = req.params;
-        //fetch comments from postgress database
+        
+        const comment = await Comment.findByPk(commentId)
+        
+        if(!comment){
+            return res.status(404).json({ message: "comment not found" });
+        }
+
+        return res.json(comment);
 
     } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message
-        });
+        return res.status(500).json({ message: "internal server error" });
     }
 };
 
@@ -32,75 +73,115 @@ const getSingleComment = async (req, res) => {
 //createComment
 const createComment = async (req, res) => {
     try {
-        const { postId } = req.body;
-        //fetch comments from postgress database
+        const { postId } = req.params;
+        const userId = req.userId;
 
-    } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message
+       //find the post 
+        const post = await Post.findByPk(postId);
+
+        if(!post){
+            return res.status(404).json({ message: "post not found" });
+        }
+
+        //create comment
+        const comment = await Comment.create({
+            userId,
+            postId,
+            body: req.body.body
         });
+
+        return res.status(201).json(comment);
+    } catch (err) {
+        return res.status(500).json({ message: "internal server error" });
     }
 };
 
 //likeComment
 const likeComment = async (req, res) => {
     try {
-        const { commentId } = req.body;
-        //fetch comments from postgress database
+        const { commentId } = req.params;
+        
+        //fetch comment from db
+        const comment = await Comment.findByPk(commentId);
+
+        if(!comment){
+            return res.status(404).json({ message: "comment not found" });
+        }
+
+        //like comment
+        await comment.increment('likes');
+        
+        return res.json({ message: "comment liked successfully" });
+
 
     } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message
-        });
+        return  res.status(500).json({ message: "internal server error" });
     }
 };
 
 //dislikeComment
 const dislikeComment = async (req, res) => {
     try {
-        const { commentId } = req.body;
-        //fetch comments from postgress database
+        const { commentId } = req.params;
+       
+        //fetch comment from db
+        const comment = await Comment.findByPk(commentId);
+
+        if(!comment){
+            return res.status(404).json({ message: "comment not found" });
+        }
+
+        //like comment
+        await comment.increment('dislikes');
+        
+        return res.json({ message: "comment disliked successfully" });
 
     } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message
-        });
+        return res.status(500).json({ message: "internal server error" });
     }
 };
 
 //editComment
 const editComment = async (req, res) => {
     try {
-        const { commentId } = req.body;
-        //fetch comments from postgress database
+        const { commentId } = req.params;
+        const { body } = req.body;
+       
+        //fetch comment from db
+        const comment = await Comment.findByPk(commentId);
+        if(!comment){
+            return res.status(404).json({ message: "comment not found" });
+        }
+
+        //edit comment
+        await comment.update({ body });
+
+        return res.status(204).json();
 
     } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message
-        });
+       return res.status(500).json({ message: "Internal server error" });
     }
 };
 
 //deleteComment
 const deleteComment = async (req, res) => {
     try {
-        const { commentId } = req.body;
-        //fetch comments from postgress database
+        const { commentId } = req.params;
+        console.log('commentId', commentId);
+        await Comment.destroy({
+            where: { commentId }
+        });
+
+        return res.status(204).json();
 
     } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message
-        });
+       return res.status(500).json({ message: "Internal server error" });
     }
 };
 
 module.exports = {
-    getAllComments,
+    getPostComments,
+    getUserComments,
     getSingleComment,
     createComment,
     likeComment,

@@ -39,6 +39,21 @@ const fetchPostByGroup = async (req, res) => {
 	}
 };
 
+const fetchPostByUser = async (req, res) => {
+	const userId = req.userId;
+	try {
+		const posts = await Post.findAll({
+			where: {
+				userId,
+			},
+		});
+		return res.json(posts);
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: "internal server error" });
+	}
+};
+
 const createPost = async (req, res) => {
 	
 	const { title, body, type, groupName } = req.body;
@@ -146,4 +161,5 @@ module.exports = {
 	deletePost,
 	createPost,
 	fetchPostByGroup,
+	fetchPostByUser
 };
