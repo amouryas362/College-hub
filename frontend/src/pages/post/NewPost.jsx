@@ -21,6 +21,8 @@ import { Toaster } from "../../components/ui/toaster.jsx";
 import { toast } from "../../components/ui/use-toast.js";
 import { Textarea } from "../../components/ui/textarea.jsx";
 
+import { Separator } from "../../components/ui/separator";
+
 import {
 	Select,
 	SelectContent,
@@ -29,30 +31,51 @@ import {
 	SelectValue,
 } from "../../components/ui/select.jsx";
 
+import { Loader2 } from "lucide-react"
 
-const postSchema = z
-	.object({
-        groupName: z.string().min(3, {
-			message: "Invalid group name",
-		}),
-		title: z.string().min(3, {
-			message: "Title should be of at least 3 characters",
-		}),
-		type: z.enum(["news", "event", "meme", "discussion", "general"], {
-			message: "Invalid post type",
-		}),
-		body: z.string().min(3, {
-			message: "body should be of at least 3 characters",
-		}),
-		
-	})
-	.strict();
+const MAX_FILE_SIZE = 5000000;
+const ACCEPTED_IMAGE_TYPES = [
+	"image/jpeg",
+	"image/jpg",
+	"image/png",
+	"image/webp",
+];
+
+
+const emptyStringToUndefined = z.literal('').transform(() => undefined);
+
+const asOptionalField = (schema) => {
+  return schema.optional().or(emptyStringToUndefined);
+}
+
+const postSchema = z.object({
+	groupName: z.string().min(3, {
+		message: "Invalid group name",
+	}),
+	title: z.string().min(3, {
+		message: "Title should be of at least 3 characters",
+	}),
+	type: z.enum(["news", "event", "meme", "discussion", "general"], {
+		message: "Invalid post type",
+	}),
+	body: asOptionalField(z.string().min(3, {
+		message: "body should be of at least 3 characters",
+	})),
+	image: asOptionalField(z
+		.any()
+		.refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
+		.refine(
+			(file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+			"Only .jpg, .jpeg, .png and .webp formats are supported.",
+		)),
+});
 
 const NewPost = () => {
 	const navigate = useNavigate();
 
 	const [groups, setGroups] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [postSumbit, setPostSumbit] = useState(false);
 	useEffect(() => {
 		const fetchGroups = async () => {
 			try {
@@ -80,27 +103,33 @@ const NewPost = () => {
 		resolver: zodResolver(postSchema),
 		defaultValues: {
 			title: "",
-			body: "",
 			type: "",
 			groupName: "",
+			body: "",
 		},
 	});
-
 	const onSubmit = async (values) => {
 		try {
 			const token = JSON.parse(localStorage.getItem("token"));
-
+			const formData = new FormData();
+			formData.append("title", values.title);
+			formData.append("body", values.body);
+			formData.append("type", values.type);
+			formData.append("groupName", values.groupName);
+			formData.append("image", values.image);
+			setPostSumbit(true);
 			const res = await axios.post(
 				"http://localhost:3000/api/v1/post/new",
-				values,
+				formData,
 				{
 					headers: {
-						"Content-type": "application/json",
+						"Content-type": "multipart/form-data",
 						Authorization: `Bearer ${token}`,
 					},
 				},
 			);
-            form.reset();
+			form.reset();
+			setPostSumbit(false);
 			navigate(`/group/${values.groupName}`);
 		} catch (err) {
 			console.log("Error: ", err);
@@ -195,11 +224,40 @@ const NewPost = () => {
 										<Textarea
 											placeholder="Enter your post here..."
 											{...field}
-											required
 										/>
 									</FormControl>
 									<FormDescription>
 										Post's content goes here
+									</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<Separator />
+						<FormField
+							control={form.control}
+							name="image"
+							render={({
+								field: { value, onChange, ...fieldProps },
+							}) => (
+								<FormItem>
+									<FormLabel>Post Image</FormLabel>
+									<FormControl>
+										<Input
+											{...fieldProps}
+											placeholder="Picture"
+											type="file"
+											accept="image/*, application/pdf"
+											onChange={(event) =>
+												onChange(
+													event.target.files &&
+														event.target.files[0],
+												)
+											}
+										/>
+									</FormControl>
+									<FormDescription>
+										Post's image goes here
 									</FormDescription>
 									<FormMessage />
 								</FormItem>
@@ -248,11 +306,19 @@ const NewPost = () => {
 							)}
 						/>
 
-						<Button className="self-center w-[80%]" type="submit">
-							Create
-						</Button>
+						{postSumbit ? (
+							<Button disabled>
+								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+								Please wait
+							</Button>
+						) : (
+							<Button
+								className="self-center w-[80%]"
+								type="submit">
+								Create
+							</Button>
+						)}
 					</form>
-
 					<Toaster />
 				</Form>
 			</div>

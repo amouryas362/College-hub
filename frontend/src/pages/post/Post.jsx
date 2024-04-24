@@ -12,7 +12,7 @@ import { Toaster } from "../../components/ui/toaster.jsx";
 import { toast } from "../../components/ui/use-toast";
 
 const Post = (props) => {
-	const { title, body, type, likes, dislikes, groupName } = props;
+	const { title, body, type, likes, dislikes, groupName, postImage } = props;
 
 	const [reaction, setReaction] = useState(null);
 	const [like, setLike] = useState(likes);
@@ -87,12 +87,14 @@ const Post = (props) => {
 					<h3 className="text-xl mr-3">{title}</h3>
 					<Badge>{type}</Badge>
 				</div>
-				<Link to={`/group/${groupName}`} className="text-base font-light mr-3">{groupName}</Link>
+				<Link
+					to={`/group/${groupName}`}
+					className="text-base font-light mr-3">
+					{groupName}
+				</Link>
 			</div>
-			<p className="font-thin w-full p-5">{body}</p>
-			{/* {props.idx % 2 === 1 ? (
-				<img src={postImage} alt="post image" />
-			) : null} */}
+			{body && <p className="font-thin w-full p-5">{body}</p>}
+			{postImage && <img src={postImage} alt="post image" />}
 			<div className="flex items-center bg-slate-100 w-full p-2 font-base">
 				<Button
 					onClick={likePost}
