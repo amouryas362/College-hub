@@ -1,5 +1,10 @@
 const express = require('express');
+const multer = require('multer');
+
 const postRouter = express.Router();
+const upload = multer({ dest: 'uploads/' });
+
+
 
 const validateAuthToken = require('../middlewares/validateAuthToken');
 const {
@@ -14,10 +19,8 @@ const {
 } = require('../controllers/postControllers');
 
 
-
-//TODO: create a middleware to check if the user is allowed to CRUD a post
 // create
-postRouter.post('/new', validateAuthToken, createPost); //TODO: add a joi post validation middleware
+postRouter.post('/new', validateAuthToken, upload.single('image'), createPost);
 
 // fetch
 postRouter.get('/:id', validateAuthToken, fetchPost); 

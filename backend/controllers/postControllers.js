@@ -1,5 +1,5 @@
 const db = require("../model/db");
-
+const cloudinary = require("../config/cloudinary");
 const logger = require("../logger.util");
 
 const Post = db.posts;
@@ -41,7 +41,6 @@ const fetchPostByGroup = async (req, res) => {
 };
 
 const fetchPostByUser = async (req, res) => {
-	
 	try {
 		const username = req.params.username;
 		const user = await User.findOne({
@@ -49,7 +48,7 @@ const fetchPostByUser = async (req, res) => {
 				username,
 			},
 		});
-		if(!user){
+		if (!user) {
 			return res.status(404).json({ message: "user not found" });
 		}
 
@@ -62,16 +61,22 @@ const fetchPostByUser = async (req, res) => {
 };
 
 const createPost = async (req, res) => {
-	
-	const { title, body, type, groupName } = req.body;
-	const userId = req.userId;
-
 	try {
-		
+		const { title, body, type, groupName } = req.body;
+		const userId = req.userId;
+		const image = req.file;
+
+		const options = {
+			use_filename: true,
+			unique_filename: false,
+			overwrite: true,
+		};
+
 		const group = await Group.findByPk(groupName);
 		if (!group) {
 			return res.status(404).json({ message: "group not found" });
 		}
+		const { secure_url: postImage } = await cloudinary.uploader.upload(image.path, options);
 
 		const post = await Post.create({
 			title,
@@ -79,6 +84,7 @@ const createPost = async (req, res) => {
 			type,
 			userId,
 			groupName,
+			postImage
 		});
 
 		await group.addPost(post);
@@ -168,5 +174,5 @@ module.exports = {
 	deletePost,
 	createPost,
 	fetchPostByGroup,
-	fetchPostByUser
+	fetchPostByUser,
 };

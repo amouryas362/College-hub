@@ -25,6 +25,7 @@ const postModel = (sequelize) => {
 					msg: "Min 20 chars allowed",
 				},
 			},
+			allowNull: true
 		},
 		type: {
 			type: DataTypes.ENUM(
@@ -44,6 +45,9 @@ const postModel = (sequelize) => {
 		dislikes: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
+		},
+		postImage: {
+			type: DataTypes.STRING,
 		},
 	});
 };

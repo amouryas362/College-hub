@@ -1,12 +1,11 @@
 const express = require("express");
 require("dotenv").config();
 const logger = require("./logger.util");
-const cors = require('cors');
+const cors = require("cors");
 //database connections
 const db = require("./model/db");
-
 try {
-	db.sequelize.sync(/*{ alter: true }*/);
+	db.sequelize.sync(/**/{ alter: true });
 } catch (e) {
 	console.log("DB error: ", e);
 }
@@ -22,6 +21,7 @@ const app = express();
 
 //middleware calls
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 //routes
 
