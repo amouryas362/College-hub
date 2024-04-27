@@ -2,11 +2,11 @@
 
 ## Problem Statement
 
-MANIT is a large college with numerous events happening throughout the year. However, many of these events often go unnoticed by students, even when they are of significant importance. This lack of awareness is a common pain point for students at the college.
+MANIT is a large college with numerous events happening throughout the year. However, many of these events often go unnoticed by students, even when they are important. This lack of awareness is a common pain point for students at the college.
 
 ## Solution
 
-"The College Hub" is a project designed to address this issue. It serves as a centralized platform for all news and events taking place within the college. The primary goal is to keep students and users well-informed about the various activities and occurrences on campus.
+"The College Hub" is a project designed to address this issue. It serves as a centralized platform for all news and events within the college. The primary goal is to keep students and users well-informed about campus activities and occurrences.
 
 In summary, "The College Hub" is a comprehensive college news and event platform that:
 
@@ -20,7 +20,7 @@ In summary, "The College Hub" is a comprehensive college news and event platform
 
 ### Prerequisites
 
-1. You should have [PostgreSQL](https://www.postgresql.org/download/) installed on your machine along with [pgAdmin](https://www.postgresql.org/download/)
+1. You should have [NodeJS](https://nodejs.org/en/download) and [PostgreSQL](https://www.postgresql.org/download/) installed on your machine
 
 2. Clone the repo
     ```sh
@@ -29,49 +29,50 @@ In summary, "The College Hub" is a comprehensive college news and event platform
 
 3. Create a database with the name `TheCollegeHub` using pgAdmin
 
-4. Create the tables in the database by running the [SQL Source file](https://github.com/Aloneduckling/TheCollegeHub/blob/main/utils/creatin_tables_commands.sql) in pgAdmin
-
-5. Fill the following details in the `.env` file 
+4. Create a `.env` File in the `backend` directory and add the following details in the `.env` file 
     ```
-    # NODE_ENV
-    NODE_ENV='development'
-
-
-    # express port
-    PORT= #enter the port number here
-
-    # postgress configurations
-    DB_USER= #enter the postgress username here
-    DB_PASSWORD= #enter the password here
-    DB_HOST='localhost'
-    DB_NAME='TheCollegeHub'
-    DB_PORT=5432 #this is the default port for postgres database
-
-    # JWT SECRET
-    JWT_SECRET= #any random string will do
+        NODE_ENV='dev'
+        
+        PORT=3000
+        
+        DB_USER=''
+        DB_PASSWORD=''
+        DB_HOST='localhost'
+        DB_NAME='TheCollegeHub'
+        DB_PORT=5432
+        
+        JWT_SECRET=''
+        
+        
+        CLOUDINARY_CLOUD_NAME=""
+        CLOUDINARY_API_KEY=""
+        CLOUDINARY_API_SECRET=""
     ```
-
+5. This project uses [Cloudinary](https://cloudinary.com/users/register_free) for hosting images so signup on the platform to get your credentials.
 ### Installation and getting the server up and running
 
 
-1. Install NPM packages
+1. Install NPM packages,  from the root of the project execute the following
    ```sh
    cd backend
    npm install
    ```
 2. Start the server
     ```sh
-    npm start
+    npm run dev
     ```
 
-## Roadmap
+### Installation and getting the frontend up and running
 
-### Backend
 
-- [x] Migrate to an ORM for the backend
-- [ ] Complete the commentControllers
-- [ ] Implement Unit tests
-- [ ] Implement rate-limiting
-
+1. Install NPM packages, from the root of the project execute the following
+   ```sh
+   cd frontend
+   npm install
+   ```
+2. Start the server
+    ```sh
+    npm run dev
+    ```
 ---
 **The College Hub** - Stay Connected, Stay Informed
