@@ -32,6 +32,8 @@ groupRouter.post("/:groupName/join", validateAuthToken, joinGroup);
 
 groupRouter.post("/:groupName/leave", validateAuthToken, leaveGroup);
 
+groupRouter.get('/:groupName/membership', validateAuthToken, checkMembership);
+
 groupRouter.put(
 	"/:groupName/settings",
 	validateAuthToken,
@@ -43,6 +45,6 @@ groupRouter.delete("/:groupName", validateAuthToken, deleteGroup);
 
 groupRouter.post('/:groupName/moderator/create', validateAuthToken, createModerator);
 
-groupRouter.get('/:groupName/membership', validateAuthToken, checkMembership);
+
 
 module.exports = groupRouter;

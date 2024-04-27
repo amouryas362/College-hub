@@ -21,10 +21,10 @@ const validateAuthToken = require("../middlewares/validateAuthToken");
 const authRouter = express.Router();
 
 //signUp route
-authRouter.post("/signup", validateAuthToken, validateSignUpData, signup);
+authRouter.post("/signup", validateSignUpData, signup);
 
 //signIn route
-authRouter.post("/signin", validateAuthToken, validateSignInData, signin);
+authRouter.post("/signin", validateSignInData, signin);
 
 //check if user loggedin
 authRouter.get('/me', validateAuthToken, isLoggedIn);

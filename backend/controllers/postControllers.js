@@ -76,7 +76,11 @@ const createPost = async (req, res) => {
 		if (!group) {
 			return res.status(404).json({ message: "group not found" });
 		}
-		const { secure_url: postImage } = await cloudinary.uploader.upload(image.path, options);
+		let postImage;
+		if(image){
+			const img = await cloudinary.uploader.upload(image.path, options);
+			postImage = img.secure_url;
+		}
 
 		const post = await Post.create({
 			title,

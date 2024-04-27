@@ -373,7 +373,6 @@ const checkMembership = async (req, res) => {
 		if(!group){
 			return res.status(404).json({ message: "group not found" });
 		}
-
 		const member = await group.getMember({
 			where: { userId },
 			attributes: ['userId'],
