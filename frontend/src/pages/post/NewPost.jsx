@@ -113,6 +113,9 @@ const NewPost = () => {
 			const token = JSON.parse(localStorage.getItem("token"));
 			const formData = new FormData();
 			formData.append("title", values.title);
+			if(!values.body){
+				values.body = "";
+			}
 			formData.append("body", values.body);
 			formData.append("type", values.type);
 			formData.append("groupName", values.groupName);

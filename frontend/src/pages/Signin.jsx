@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
 import {
 	Form,
 	FormControl,
@@ -23,7 +22,9 @@ import { toast } from "../components/ui/use-toast";
 const signupSchema = z
 	.object({
 		email: z.string().email({ message: "Invalid email address" }),
-		password: z.string().min(6, {message: "Password should be of at least 6 characters"}),
+		password: z
+			.string()
+			.min(6, { message: "Password should be of at least 6 characters" }),
 	})
 	.strict();
 
@@ -34,28 +35,26 @@ const Signin = () => {
 		resolver: zodResolver(signupSchema),
 		defaultValues: {
 			email: "",
-			password: ""
-		}
+			password: "",
+		},
 	});
 
 	const onSubmit = async (values) => {
-		
 		try {
-		    const res = await axios.post(
-		        "http://localhost:3000/api/v1/signin",
-		        values
-		    );
-		    localStorage.setItem("token", JSON.stringify(res.data.token));
-		    navigate("/");
-			
+			const res = await axios.post(
+				"http://localhost:3000/api/v1/signin",
+				values,
+			);
+			localStorage.setItem("token", JSON.stringify(res.data.token));
+			navigate("/");
 		} catch (err) {
-		    console.log("Error: ", err);
-		    toast({
-		        title: "Uh oh! Something went wrong.",
-		        description: err.response.data.message,
-		    });
+			console.log("Error: ", err);
+			toast({
+				title: "Uh oh! Something went wrong.",
+				description: err.response.data.message,
+			});
 		}
-	
+
 		form.reset();
 	};
 
@@ -118,6 +117,20 @@ const Signin = () => {
 						</Button>
 					</form>
 
+					<div className="flex items-center my-5">
+						<hr className="flex-grow border-t border-gray-300" />
+						<span className="px-3 text-gray-500">
+							Don't have an account?
+						</span>
+						<hr className="flex-grow border-t border-gray-300" />
+					</div>
+
+					<Button
+						onClick={(e) => navigate("/signup")}
+						className="self-center w-[80%]"
+						type="submit">
+						Sign Up
+					</Button>
 					<Toaster />
 				</Form>
 			</div>

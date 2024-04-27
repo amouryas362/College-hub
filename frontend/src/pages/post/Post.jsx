@@ -13,7 +13,6 @@ import { toast } from "../../components/ui/use-toast";
 
 const Post = (props) => {
 	const { title, body, type, likes, dislikes, groupName, postImage } = props;
-
 	const [reaction, setReaction] = useState(null);
 	const [like, setLike] = useState(likes);
 	const [dislike, setDislike] = useState(dislikes);

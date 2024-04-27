@@ -96,7 +96,7 @@ const Navbar = (props) => {
 								<User className="mr-2 w-4 h-4" /> {user === null ? " ": user.username}
 							</DropdownMenuLabel>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem onClick={() => localStorage.removeItem('token')}>
+							<DropdownMenuItem onClick={() => {localStorage.removeItem('token'); navigate('/signin')}}>
 								<LogOut className="mr-2 h-4 w-4" />
 								<span>Log out</span>
 							</DropdownMenuItem>
