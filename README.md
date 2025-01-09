@@ -24,7 +24,7 @@ In summary, "The College Hub" is a comprehensive college news and event platform
 
 2. Clone the repo
     ```sh
-    git clone https://github.com/Aloneduckling/TheCollegeHub.git
+    git clone https://github.com/amourya362/TheCollegeHub.git
     ```
 
 3. Create a database with the name `TheCollegeHub` using pgAdmin
@@ -34,7 +34,7 @@ In summary, "The College Hub" is a comprehensive college news and event platform
         NODE_ENV='dev'
         
         PORT=3000
-        
+        git 
         DB_USER=''
         DB_PASSWORD=''
         DB_HOST='localhost'
