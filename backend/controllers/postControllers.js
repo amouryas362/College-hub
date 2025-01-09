@@ -6,6 +6,7 @@ const Post = db.posts;
 const Group = db.groups;
 const User = db.users;
 
+
 const fetchPost = async (req, res) => {
 	//get the postId from the params
 	const { id } = req.params;

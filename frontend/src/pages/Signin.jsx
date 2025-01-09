@@ -18,6 +18,7 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input.jsx";
 import { Toaster } from "../components/ui/toaster";
 import { toast } from "../components/ui/use-toast";
+//--------------------------------------------------------------------------------------------//
 
 const signupSchema = z
 	.object({

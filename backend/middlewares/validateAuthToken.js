@@ -26,4 +26,5 @@ const validateAuthToken = (req, res, next) => {
 	next();
 };
 
+
 module.exports = validateAuthToken;
