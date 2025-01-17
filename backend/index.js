@@ -2,13 +2,8 @@ const express = require("express");
 require("dotenv").config();
 const logger = require("./logger.util");
 const cors = require("cors");
-//database connections
-const db = require("./model/db");
-try {
-	db.sequelize.sync(/**/{ alter: true });
-} catch (e) {
-	console.log("DB error: ", e);
-}
+
+
 
 const authRouter = require("./routes/authRouter");
 const profileRouter = require("./routes/profileRouter");
@@ -52,5 +47,20 @@ app.use((err, req, res, next) => {
 	logger(err);
 	return res.status(500).json({ message: "Internal server error!" });
 });
+
+
+//staring the server
+app.listen(process.env.PORT || 3000, () => {
+	logger("server running");
+});
+
+
+//database connections
+const db = require("./model/db");
+try {
+	db.sequelize.sync(/**/{ alter: true });
+} catch (e) {
+	console.log("DB error: ", e);
+}
 
 module.exports = app;
