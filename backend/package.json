@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js",
-    "postinstall": "npm rebuild bcrypt --build-from-source"
+    "start": "node index.js"
   },
   "author": "Arun Mourya",
   "license": "ISC",
