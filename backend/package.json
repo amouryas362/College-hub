@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "dev": "nodemon index.js",
-  "start": "node index.js"
-},
-
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
   "author": "Arun Mourya",
   "license": "ISC",
   "devDependencies": {
@@ -17,7 +16,7 @@
     "supertest": "^6.3.4"
   },
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "cloudinary": "^2.2.0",
     "cors": "^2.8.5",
     "express": "^4.19.2",
